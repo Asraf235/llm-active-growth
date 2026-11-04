@@ -16,6 +16,3 @@ data/run_selection*.csv
 examples/synthetic/results/
 examples/synthetic/runs.csv
 *.pptx
-
-# Claude Code reads CLAUDE.md; locally it is a one-line import of AGENTS.md
-CLAUDE.md
