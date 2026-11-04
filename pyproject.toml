@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aln-bo"
+version = "0.2.0"
+description = "Gaussian-process Bayesian optimisation of thin-film growth recipes with context parameters, a local SQLite campaign database, GP / BNN / random-forest surrogate cross-checks and an LLM review step"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "pandas>=2.0",
+  "scikit-learn>=1.4",
+  "matplotlib>=3.7",
+  "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+botorch = ["torch>=2.2", "botorch>=0.11", "gpytorch>=1.11"]
+bnn = ["jax>=0.4", "numpyro>=0.14", "neurobayes"]
+alchemy = ["alchemy @ git+https://github.com/sumner-harris/alchemy.git"]
+llm = ["anthropic>=0.40"]
+llm-openai = ["openai>=1.40"]
+yaml = ["pyyaml>=6"]
+dev = ["pytest>=8"]
+all = ["aln-bo[botorch,bnn,alchemy,llm,llm-openai,yaml,dev]"]
+
+[project.scripts]
+aln-bo = "aln_bo.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aln_bo*"]

@@ -1,0 +1,151 @@
+{
+ "name": "aln_sputter_sioxny",
+ "display_name": "SiOxNy plasma step before AlN sputtering on SiO2",
+ "description": "Plasma oxynitridation of SiO2 (temperature, bias, gas ratio, pressure, time) followed by reactive sputtering of an AlN seed layer; objective = rocking-curve width of the AlN (0002) peak (texture), with the 2theta peak width as the alternative objective.",
+ "params": [
+  {
+   "name": "OxyT",
+   "column": "Oxy temp (C)",
+   "low": 25.0,
+   "high": 700.0,
+   "unit": "C",
+   "step": 25.0
+  },
+  {
+   "name": "OxyBias",
+   "column": "Oxy bias (W)",
+   "low": 0.0,
+   "high": 60.0,
+   "unit": "W",
+   "step": 5.0
+  },
+  {
+   "name": "N2frac",
+   "column": "N2 / (Ar + N2)",
+   "low": 0.25,
+   "high": 0.75,
+   "unit": "",
+   "step": 0.125,
+   "derive": "OxyN2 / (OxyAr + OxyN2)"
+  },
+  {
+   "name": "OxyP",
+   "column": "Oxy pressure (mTorr)",
+   "low": 5.0,
+   "high": 40.0,
+   "unit": "mTorr",
+   "step": 5.0
+  },
+  {
+   "name": "OxyTime",
+   "column": "Oxynitride time (min)",
+   "low": 1.0,
+   "high": 30.0,
+   "unit": "min",
+   "step": 1.0
+  },
+  {
+   "name": "InvGrowth",
+   "column": "1 / growth time (1/min)",
+   "low": 0.005,
+   "high": 0.1,
+   "unit": "1/min",
+   "step": null,
+   "fixed": 0.07692307692307693,
+   "derive": "1 / GrowthT"
+  },
+  {
+   "name": "WorkP",
+   "column": "Working pressure (mTorr)",
+   "low": 1.5,
+   "high": 10.0,
+   "unit": "mTorr",
+   "step": 0.1,
+   "fixed": 1.7
+  },
+  {
+   "name": "StageMax",
+   "column": "Oxy stage height",
+   "low": 0.0,
+   "high": 1.0,
+   "unit": "1=Max",
+   "step": 1.0,
+   "fixed": 1.0,
+   "encode": {
+    "max": 1.0,
+    "min": 0.0
+   }
+  },
+  {
+   "name": "OxyFlow",
+   "column": "Ar + N2 (sccm)",
+   "low": 30.0,
+   "high": 60.0,
+   "unit": "sccm",
+   "step": 5.0,
+   "fixed": 40.0,
+   "derive": "OxyAr + OxyN2"
+  }
+ ],
+ "physical": {
+  "OxyAr": "Oxy Ar (sccm)",
+  "OxyN2": "Oxy N2 (sccm)",
+  "GrowthT": "Growth time (mins)"
+ },
+ "physical_from_derived": {
+  "OxyAr": "OxyFlow * (1 - N2frac)",
+  "OxyN2": "OxyFlow * N2frac",
+  "GrowthT": "1 / InvGrowth"
+ },
+ "targets": [
+  {
+   "name": "FWHM",
+   "column": "XRD FWHM at 36° 2θ",
+   "unit": "deg 2theta",
+   "minimize": true,
+   "role": "alt"
+  },
+  {
+   "name": "RC_FWHM",
+   "column": "Rocking Curve FWHM at 36° 2θ",
+   "unit": "deg omega",
+   "minimize": true,
+   "role": "main"
+  },
+  {
+   "name": "SiOxNy_thick",
+   "column": "SiOxNy XRR thickness (nm)",
+   "unit": "nm",
+   "minimize": true,
+   "role": "aux"
+  },
+  {
+   "name": "SiOxNy_rough",
+   "column": "SiOxNy XRR roughness (nm)",
+   "unit": "nm",
+   "minimize": true,
+   "role": "aux"
+  },
+  {
+   "name": "AlN_density",
+   "column": "AlN XRR density (g/cm3)",
+   "unit": "g/cm3",
+   "minimize": false,
+   "role": "aux"
+  }
+ ],
+ "import": {
+  "process_sheet": "AlN Oxy",
+  "data_sheet": "AlN Oxy SiO2 Data",
+  "run_col": "Run (#)",
+  "exclude": {
+   "Stage Grounded": [
+    1,
+    1.0,
+    true
+   ]
+  },
+  "substrate_must_contain": "SiO2"
+ },
+ "llm_context": "- The MAIN objective is the rocking-curve FWHM of the AlN (0002) reflection: SMALLER is better (tighter c-axis alignment / less mosaic spread). The 2theta peak FWHM is the alternative objective: smaller = larger coherent domains, less strain; it is strongly thickness dependent, which is why growth time is a context parameter.\n- Auxiliary GPs predict SiOxNy XRR thickness and roughness and AlN XRR density. A dense AlN (~3.2-3.3 g/cm3), a thin and smooth SiOxNy interlayer are usually what a good seed layer looks like.\n- Oxy bias (RF substrate bias during plasma treatment) controls ion energy: more bias = more nitrogen incorporation / sputter-cleaning but also more damage and roughening of the interlayer.\n- Oxy pressure sets the plasma density and ion mean free path; high pressure = softer, more thermalised plasma; very low pressure = energetic ions.\n- N2 / Ar ratio sets reactive-species supply; temperature and time set diffusion-limited growth of the oxynitride (thickness ~ sqrt(time), strongly thermally activated).\n- A very thick or rough SiOxNy interlayer tends to degrade AlN texture; so does an untreated SiO2 surface. There is usually a sweet spot."
+}
