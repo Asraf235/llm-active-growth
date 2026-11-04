@@ -4,7 +4,8 @@ Active learning for thin-film growth recipes: Bayesian optimisation with a Bayes
 process and a random forest as surrogates, a local SQLite campaign database, and an LLM review of every suggestion.
 Built for an AlN seed-layer campaign (plasma oxynitridation of SiO2 before AlN sputtering, the shipped example) and
 written so that one database can hold several growth tools, each with its own parameter spec. A coding agent
-(Claude Code, Codex) can run the loop from plain requests; `AGENTS.md` tells it how.
+(Claude Code, Codex) can run the loop from plain requests; `AGENTS.md` tells it how. Codex reads that file directly;
+for Claude Code create a `CLAUDE.md` containing the single line `@AGENTS.md`, which imports it.
 
 The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) (BoTorch GP, qLogEI) and the figures are
 alchemy's projection layouts; the package name inside Python is `aln_bo`.
