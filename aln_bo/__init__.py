@@ -7,17 +7,16 @@
     pipeline    run_step(): one BO step with maps and the LLM packet
     validation  NeuroBayes BNN and random forest (cross-checks, or drivers of the acquisition)
     alchemy_plots  the figures: alchemy's projection layouts (mean, variance, acquisition with the star)
-    llm_review  the Claude review of a suggestion
+    llm_review  the LLM review of a suggestion (agent-as-reviewer, or Anthropic / OpenAI API)
     cli         `aln-bo` command line
 
-Reading order for newcomers: config -> data -> surrogate -> acquisition -> campaign -> alchemy_plots -> pipeline
-(scripts/walkthrough.py prints each stage on the example data).
+Reading order for newcomers: config -> data -> surrogate -> acquisition -> campaign -> alchemy_plots -> pipeline.
 
 Backends (aln_bo/backends/): scikit-learn (runs anywhere) and BoTorch (needs torch).
 """
 from . import config
 from .config import PARAMS, PARAM_NAMES, FREE_NAMES, bounds_array, snap_to_grid, apply_fixed, configure, load_spec
-from .data import load_sputter_log, load_dataset, dataset_from_frame, select_runs, parse_run_selection, append_rows, Dataset
+from .data import load_sputter_log, load_dataset, dataset_from_frame, select_runs, parse_run_selection, Dataset
 from .surrogate import GP, GPList
 from .acquisition import expected_improvement, suggest_ei, suggest_ehvi, top_pool_candidates, is_non_dominated
 from .campaign import MainCampaign, AuxModels
@@ -29,7 +28,7 @@ from . import alchemy_plots
 
 __all__ = [
     "config", "PARAMS", "PARAM_NAMES", "FREE_NAMES", "bounds_array", "snap_to_grid", "apply_fixed", "configure", "load_spec",
-    "load_sputter_log", "load_dataset", "dataset_from_frame", "select_runs", "parse_run_selection", "append_rows", "Dataset",
+    "load_sputter_log", "load_dataset", "dataset_from_frame", "select_runs", "parse_run_selection", "Dataset",
     "GP", "GPList", "expected_improvement", "suggest_ei", "suggest_ehvi", "top_pool_candidates", "is_non_dominated",
     "MainCampaign", "AuxModels", "get_backend", "available_backends", "resolve_backend_name",
     "RandomForest", "BNN", "bnn_available", "Store", "run_step", "alchemy_plots",

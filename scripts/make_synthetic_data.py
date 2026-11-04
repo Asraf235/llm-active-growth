@@ -3,7 +3,7 @@
 A hidden ground truth is baked in: FWHM has a minimum near OxyBias~35 W, OxyP~20 mTorr,
 OxyTime~10 min and gets narrower with longer growth time (thicker film).
 
-    python scripts/make_synthetic_data.py --n 30 --out data/example_runs.csv
+    python scripts/make_synthetic_data.py --n 30 --out examples/synthetic/runs.csv
 """
 import argparse
 import pathlib
@@ -37,7 +37,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=30)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--out", default="data/example_runs.csv")
+    ap.add_argument("--out", default="examples/synthetic/runs.csv")
     a = ap.parse_args()
     rng = np.random.default_rng(a.seed)
     X = {}

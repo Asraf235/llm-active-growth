@@ -21,7 +21,7 @@ from aln_bo import llm_review
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("data", nargs="?", default="AlN Sputter Log.xlsx")
+    ap.add_argument("data", help="runs CSV/XLSX (one row per run), or the two-sheet AlN sputter log")
     ap.add_argument("--spec", default=None, help="experiment spec JSON (default: the built-in AlN example)")
     ap.add_argument("--target", choices=cfg.objective_names(), default=None)
     ap.add_argument("--q", type=int, default=1, help="samples to suggest")

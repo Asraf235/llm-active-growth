@@ -77,7 +77,7 @@ def posterior_on_grid(model_posterior, X, chunk=4096):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("data", nargs="?", default="AlN Sputter Log.xlsx")
+    ap.add_argument("data", help="runs CSV/XLSX (one row per run), or the two-sheet AlN sputter log")
     ap.add_argument("--target", choices=cfg.objective_names(), default=None)
     ap.add_argument("--kernel", choices=["rbf", "matern"], default="rbf")
     ap.add_argument("--surrogates", default="GP,BNN,RF", help="comma list from GP, BNN, RF")
@@ -86,8 +86,8 @@ def main():
     ap.add_argument("--rf-bootstrap", type=int, default=10)
     ap.add_argument("--runs", default=None)
     ap.add_argument("--runs-keep", default="INCLUDE")
-    ap.add_argument("--out", default="results/on INCLUDED runs only")
-    ap.add_argument("--name", default="alchemy's function")
+    ap.add_argument("--out", default="results")
+    ap.add_argument("--name", default="alchemy_plots")
     ap.add_argument("--suffix", default="", help="appended to the file names (e.g. _v2 when the old PNGs are open)")
     a = ap.parse_args()
     from alchemy.data_utils import plot_surrogate, plot_gp_mean_projections

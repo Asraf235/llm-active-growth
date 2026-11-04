@@ -10,7 +10,7 @@ Inputs (the "packet", build_packet): the objective and its goal, the parameters 
 bounds, the best runs (any context and at the fixed context), the GP suggestion with its
 predicted value +/- std and acquisition value, the auxiliary predictions at that recipe, the
 next-best alternatives with the same predictions, the ARD lengthscales, the observed runs, and
-the dashboard image. The system prompt is built from the live spec (system_prompt): experiment
+the acquisition figure. The system prompt is built from the live spec (system_prompt): experiment
 description, objective, and the spec's `llm_context` physics notes. Output: strict JSON, parsed
 and also saved as Markdown.
 

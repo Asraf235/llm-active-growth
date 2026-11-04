@@ -5,10 +5,12 @@ time), four context knobs held at the standard AlN recipe (1/growth time at 1/13
 40 sccm total flow), the main target (rocking-curve FWHM, texture), the alternative (2theta FWHM) and three auxiliary
 targets (SiOxNy thickness and roughness, AlN density), plus the physics notes the LLM reviewer may use.
 
-The data live in a two-sheet workbook; `aln-bo import ... --sputter-log` reads it with the project's own reader
-(`aln_bo.data.load_sputter_log`), which joins the process and measurement sheets, cleans text cells, averages
-repeat XRD rows and drops the runs the log marks as scrapped. Run selections with reasons are in
-`data/run_selection.csv` (2theta FWHM) and `data/run_selection_RC.csv` (rocking curve, three outlier runs removed).
+The data live in a two-sheet workbook (not part of this repository); `aln-bo import ... --sputter-log` reads it
+with the project's own reader (`aln_bo.data.load_sputter_log`), which joins the process and measurement sheets,
+cleans text cells, averages repeat XRD rows and drops the runs the log marks as scrapped. The run selections used
+in the campaign (`thin_films`: 34 runs at one AlN recipe; `thin_films_rc`: 31 runs, three rocking-curve outliers
+removed) are CSVs with `run, GPBO, reason` columns kept next to the workbook.
+Growth time enters the model as 1/t: see [../../docs/growth_time_vs_inverse.png](../../docs/growth_time_vs_inverse.png).
 
 ```bash
 aln-bo init campaign.sqlite
@@ -20,9 +22,9 @@ aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films --name 
 aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films_rc --target RC_FWHM --name rc_step
 ```
 
-Paper-style figures (projections, GP / BNN / RF cross-check, regret) and the alchemy-drawn figures:
+The same step and figures made with alchemy's own surrogate classes and plotting functions (need the `[alchemy]` extra):
 
 ```bash
-python scripts/run_paper_figures.py "AlN Sputter Log.xlsx" --runs data/run_selection.csv
-python scripts/alchemy_plot_surrogate.py "AlN Sputter Log.xlsx" --runs data/run_selection_RC.csv --target RC_FWHM   # needs alchemy
+python scripts/alchemy_step.py runs.csv --runs run_selection_RC.csv --target RC_FWHM --figures --fix-normalize --seed 0
+python scripts/alchemy_plot_surrogate.py "AlN Sputter Log.xlsx" --runs run_selection_RC.csv --target RC_FWHM
 ```

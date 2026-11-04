@@ -28,6 +28,9 @@ yaml = ["pyyaml>=6"]
 dev = ["pytest>=8"]
 all = ["aln-bo[botorch,bnn,alchemy,llm,llm-openai,yaml,dev]"]
 
+[project.urls]
+Repository = "https://github.com/Asraf235/llm-active-growth"
+
 [project.scripts]
 aln-bo = "aln_bo.cli:main"
 

@@ -220,10 +220,3 @@ def select_runs(ds: Dataset, runs: list[float]) -> Dataset:
     rep["usable_runs"] = len(df)
     rep["rows_per_target"] = {t: int(df[t].notna().sum()) for t in cfg.target_names() if t in df.columns}
     return Dataset(df=df, report=rep)
-
-
-def append_rows(path: str | Path, new_rows: pd.DataFrame) -> None:
-    path = Path(path)
-    ds = load_dataset(path)
-    out = pd.concat([ds.df, new_rows], ignore_index=True)
-    out.to_excel(path, index=False) if path.suffix.lower() in (".xlsx", ".xls") else out.to_csv(path, index=False)

@@ -197,7 +197,6 @@ def objective_names() -> list[str]:
 
 
 configure(DEFAULT_SPEC)
-FWHM_COL = MAIN.name          # legacy name
 
 
 def bounds_array() -> np.ndarray:

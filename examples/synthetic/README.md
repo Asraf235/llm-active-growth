@@ -20,13 +20,13 @@ aln-bo export examples/synthetic/demo.sqlite aln_sputter_sioxny examples/synthet
 
 `four_runs.xlsx` is what a user's own sheet looks like: one row per run with the raw knobs
 (OxyT, OxyBias, OxyAr, OxyN2, OxyP, OxyTime, GrowthT, WorkP, StageMax), the measured targets and notes.
-Any surrogate can drive Expected Improvement; the BNN needs the `[bnn]` extra, the MLP ensemble runs anywhere.
+Any surrogate can drive Expected Improvement; the BNN needs the `[bnn]` extra, GP and random forest run anywhere.
 
 ```bash
 aln-bo init     four_runs.sqlite
 aln-bo register four_runs.sqlite examples/aln_sputter/spec.json
 aln-bo import   four_runs.sqlite aln_sputter_sioxny examples/synthetic/four_runs.xlsx
-aln-bo step     four_runs.sqlite aln_sputter_sioxny --surrogate bnn --acq ei --plan --name bnn_step1   # or --surrogate mlp / gp / rf
+aln-bo step     four_runs.sqlite aln_sputter_sioxny --surrogate bnn --acq ei --plan --name bnn_step1   # or --surrogate gp / rf
 ```
 
 With four runs every surrogate is mostly uncertainty, so the first suggestions explore the edges of the box;
