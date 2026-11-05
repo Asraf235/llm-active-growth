@@ -21,5 +21,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---
-This package depends on, and its scripts/alchemy_plot_surrogate.py uses, "alchemy"
-(https://github.com/sumner-harris/alchemy, Copyright (c) 2025 sumner-harris, MIT License).
+The panel layouts in aln_bo/plots.py are adapted from plot_surrogate and plot_gp_mean_projections in
+"alchemy" (https://github.com/sumner-harris/alchemy), Copyright (c) 2025 sumner-harris, MIT License.
