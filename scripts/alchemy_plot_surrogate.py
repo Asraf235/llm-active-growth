@@ -1,6 +1,6 @@
 """Projection figures drawn by alchemy's own plotting functions (data_utils.plot_surrogate and
 plot_gp_mean_projections) for the GP, the BNN and the random forest, for a side-by-side check
-against the package figures (aln_bo/alchemy_plots.py).
+against the package figures (aln_bo/plots.py).
 
     wsl: python scripts/alchemy_plot_surrogate.py "AlN Sputter Log.xlsx" --runs data/run_selection.csv
 

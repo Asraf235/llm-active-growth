@@ -3,7 +3,7 @@
 This is the body of the step made callable, so the CLI, the scripts and an agent all run the same code.
 Everything is written to `out`; the return value carries the objects.
 
-Figures (alchemy's projection layouts, see alchemy_plots.py):
+Figures (projection maps, see plots.py):
     <LABEL>_mean.png, <LABEL>_variance.png      the driving surrogate (BNN by default; GP or RF with surrogate=...)
     acquisition_<ACQ>_<LABEL>.png               its acquisition with the suggested next run as a red star (the only starred figure)
     <OTHER>_mean.png, <OTHER>_variance.png      the other two of GP / RF / BNN fitted to the same runs, as cross-checks
@@ -19,7 +19,7 @@ from . import config as cfg
 from .config import PARAMS, PARAM_NAMES, FIXED
 from .campaign import MainCampaign, AuxModels
 from .backends import resolve_backend_name, available_backends, get_backend
-from . import alchemy_plots, llm_review
+from . import plots, llm_review
 
 SURROGATE_LABEL = {"gp": "GP", "bnn": "BNN", "rf": "RF"}
 
@@ -78,17 +78,17 @@ def run_step(ds, out: str | Path, *, target: Optional[str] = None, q: int = 1, n
     sug_full.to_csv(out / "suggestion.csv", index=False)
     alt_full.to_csv(out / "alternatives.csv", index=False)
 
-    # ---- figures: alchemy's projection layouts
+    # ---- figures: projection maps
     Xs = sug[PARAM_NAMES].to_numpy()
-    grids, XG = alchemy_plots.full_grid(n_grid)
-    names = alchemy_plots.free_names()
+    grids, XG = plots.full_grid(n_grid)
+    names = plots.free_names()
     lab = SURROGATE_LABEL.get(surrogate, surrogate.upper())
-    mean = alchemy_plots.evaluate(lambda X: main_c.predict(X)[0], XG)
-    std = alchemy_plots.evaluate(lambda X: main_c.predict(X)[1], XG)
-    acqv = alchemy_plots.evaluate(main_c.acquisition, XG)
-    alchemy_plots.surrogate_figures(mean, std ** 2, grids, main_c.X, main_c.Y, names, lab, out, target=tgt.name)
+    mean = plots.evaluate(lambda X: main_c.predict(X)[0], XG)
+    std = plots.evaluate(lambda X: main_c.predict(X)[1], XG)
+    acqv = plots.evaluate(main_c.acquisition, XG)
+    plots.surrogate_figures(mean, std ** 2, grids, main_c.X, main_c.Y, names, lab, out, target=tgt.name)
     acq_label = f"{acq.upper()} ({lab})"
-    acq_path = alchemy_plots.acquisition_figure(acqv, grids, main_c.X, main_c.Y, names, acq_label,
+    acq_path = plots.acquisition_figure(acqv, grids, main_c.X, main_c.Y, names, acq_label,
                                                 out / f"acquisition_{acq.upper()}_{lab}.png", marks=Xs, target=tgt.name)
     say(f"\nfigures ({len(grids[0])}^{len(grids)} grid): {lab}_mean.png, {lab}_variance.png, acquisition_{acq.upper()}_{lab}.png")
     checks = {}
@@ -102,9 +102,9 @@ def run_step(ds, out: str | Path, *, target: Optional[str] = None, q: int = 1, n
                 say("cross-check BNN skipped: JAX + NeuroBayes not installed (pip install 'aln-bo[bnn]')")
                 continue
             m = make().fit(main_c.X, main_c.Y)
-            mo = alchemy_plots.evaluate(lambda X, m=m: m.predict(X)[0], XG)
-            so = alchemy_plots.evaluate(lambda X, m=m: m.predict(X)[1], XG)
-            alchemy_plots.surrogate_figures(mo, so ** 2, grids, main_c.X, main_c.Y, names, other, out, target=tgt.name)
+            mo = plots.evaluate(lambda X, m=m: m.predict(X)[0], XG)
+            so = plots.evaluate(lambda X, m=m: m.predict(X)[1], XG)
+            plots.surrogate_figures(mo, so ** 2, grids, main_c.X, main_c.Y, names, other, out, target=tgt.name)
             ms, ss = m.predict(Xs)
             checks[other] = {"mean": float(ms[0]), "std": float(ss[0])}
             say(f"cross-check {other}: at the suggestion {ms[0]:.4f} +/- {ss[0]:.4f}  (figures {other}_mean.png, {other}_variance.png)")

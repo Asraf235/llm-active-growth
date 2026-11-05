@@ -1,14 +1,12 @@
-"""The package's figures: alchemy's projection layouts, ported.
-
-Ported from alchemy.data_utils.plot_surrogate and plot_gp_mean_projections
-(https://github.com/sumner-harris/alchemy, Copyright (c) 2025 sumner-harris, MIT License) so that the
-figures look the same whether or not alchemy itself is installed, and so they work for any surrogate
-(GP, BNN, random forest). Differences from the originals: numpy in, files out (the
-originals plt.show()), wider panel spacing, plain 4-significant-digit colourbars with 'flat' panels
-labelled as such, and the suggested next run drawn as a red star on every pair panel.
+"""The package's figures: projection maps of a surrogate over every pair of free knobs.
 
 A projection is the surrogate evaluated on a full grid over the FREE knobs (context knobs at their fixed
-values) and averaged over the other knobs for every pair, exactly as alchemy does.
+values) and averaged over the other knobs for every pair. Measured runs are drawn on top (one marker per
+distinct setting, sized by the number of runs stacked there) and the suggested next run as a red star on
+the acquisition figure. Works for any surrogate (GP, BNN, random forest).
+
+The two panel layouts were adapted from plot_surrogate and plot_gp_mean_projections in
+https://github.com/sumner-harris/alchemy (Copyright (c) 2025 sumner-harris, MIT License).
 
     grids, XG = full_grid(n)                        # the grid (list of 1-D axes) and the recipes on it
     mean, var = model mean / variance on XG         # any model with .predict(X) -> (mean, std)
@@ -34,7 +32,7 @@ MAX_GRID_POINTS = 400_000
 
 def full_grid(n: int = 12):
     """One linspace per free knob; the full product grid as recipes (context fixed). n is reduced if the
-    product would exceed MAX_GRID_POINTS (alchemy's full-grid approach is exponential in the knob count)."""
+    product would exceed MAX_GRID_POINTS (a full grid is exponential in the knob count)."""
     free = [(i, PARAMS[i]) for i in FREE_IDX]
     d = max(len(free), 1)
     n = max(3, min(n, int(MAX_GRID_POINTS ** (1.0 / d))))
@@ -112,7 +110,7 @@ def _title(fig, panels, text):
 
 
 def _upper_triangle(values, grids, Xf, Y, names, marks, title, path, cell=4.5):
-    """alchemy.plot_surrogate's layout: upper-triangle GridSpec of square panels, one array."""
+    """Upper-triangle GridSpec of square panels, one array (mean or variance)."""
     D = len(grids)
     if D < 2:
         return None
@@ -136,7 +134,7 @@ def _upper_triangle(values, grids, Xf, Y, names, marks, title, path, cell=4.5):
 
 
 def _three_columns(values, grids, Xf, Y, names, marks, title, path):
-    """alchemy.plot_gp_mean_projections' layout: all pairs in 3 columns."""
+    """All pairs in 3 columns (acquisition)."""
     D = len(grids)
     combos = list(itertools.combinations(range(D), 2))
     if not combos:
@@ -164,7 +162,7 @@ def _three_columns(values, grids, Xf, Y, names, marks, title, path):
 
 def surrogate_figures(mean, var, grids, X, Y, names, label: str, out: str | Path, marks=None,
                       target: str = "", n_runs: Optional[int] = None) -> dict:
-    """Mean and variance projections of one surrogate (alchemy's plot_surrogate layout)."""
+    """Mean and variance projections of one surrogate."""
     out = Path(out)
     Xf = np.asarray(X)[:, FREE_IDX]
     n_runs = len(Xf) if n_runs is None else n_runs
@@ -180,7 +178,7 @@ def surrogate_figures(mean, var, grids, X, Y, names, label: str, out: str | Path
 
 def acquisition_figure(acq, grids, X, Y, names, label: str, path: str | Path, marks=None, target: str = "",
                        n_runs: Optional[int] = None):
-    """Acquisition projection (alchemy's plot_gp_mean_projections layout) with the suggestion starred."""
+    """Acquisition projection with the suggestion starred."""
     Xf = np.asarray(X)[:, FREE_IDX]
     n_runs = len(Xf) if n_runs is None else n_runs
     return _three_columns(acq, grids, Xf, Y, names, marks,

@@ -6,8 +6,8 @@ Built for an AlN seed-layer campaign (plasma oxynitridation of SiO2 before AlN s
 written so that one database can hold several growth tools, each with its own parameter spec. A coding agent
 can run the loop from plain requests; `AGENTS.md` tells it how (`CLAUDE.md` imports it for Claude Code).
 
-The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) (BoTorch GP, qLogEI) and the figures are
-alchemy's projection layouts; the package name inside Python is `aln_bo`.
+The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) (BoTorch GP, qLogEI); the package name
+inside Python is `aln_bo`.
 
 ## Install
 
@@ -51,7 +51,7 @@ planned run so the measured result can be recorded against it. Without `pip inst
 
 ## Output of a step
 
-Seven figures in alchemy's projection layouts: mean and variance of the driving surrogate (BNN by default) and of the
+Seven projection maps: mean and variance of the driving surrogate (BNN by default) and of the
 two cross-check surrogates (GP, random forest), and the acquisition with the suggested run as a red star. Markers
 grow with the number of runs stacked at a setting. Also `suggestion.csv`, `alternatives.csv`, `packet.json`,
 `llm_prompt.md` (the review prompt an agent answers; no API key needed) and `summary.txt`.
@@ -60,7 +60,7 @@ grow with the number of runs stacked at a setting. Also `suggestion.csv`, `alter
 
 ```
 aln_bo/       config (spec), store (SQLite), data, surrogate + backends (sklearn, BoTorch), acquisition,
-              campaign, validation (BNN, random forest), alchemy_plots, llm_review, pipeline, cli
+              campaign, validation (BNN, random forest), plots, llm_review, pipeline, cli
 scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate, make_synthetic_data
 examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step),
               synthetic (demo loop, four-run sheet)

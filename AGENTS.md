@@ -15,7 +15,7 @@ run a BO step when asked, record results, and keep the database as the single re
 - Derived parameters (ratios, 1/time) are computed from raw knobs at load time. Store raw knob values only.
 - Check the tier before promising a backend: scikit-learn always works; BoTorch needs torch; the BNN (the default driver of
   the acquisition) needs JAX + NeuroBayes, otherwise pass `--surrogate gp`;
-  the alchemy figures need the alchemy package. `python -c "import aln_bo; print(aln_bo.available_backends())"` tells you.
+  `scripts/alchemy_*.py` need the alchemy package. `python -c "import aln_bo; print(aln_bo.available_backends())"` tells you.
 
 ## Commands
 
@@ -33,8 +33,8 @@ aln-bo record    DB EXPERIMENT RUN target=value ...     enter measured results (
 aln-bo export    DB EXPERIMENT out.xlsx|.csv            runs, measurements, selections, suggestions, spec
 ```
 
-`step` writes `results/<experiment>/<name>/`: `suggestion.csv`, `alternatives.csv`, the figures (alchemy's projection
-layouts: `<SURROGATE>_mean.png` and `<SURROGATE>_variance.png` for the driving surrogate (BNN by default) and for the
+`step` writes `results/<experiment>/<name>/`: `suggestion.csv`, `alternatives.csv`, the figures (projection
+maps: `<SURROGATE>_mean.png` and `<SURROGATE>_variance.png` for the driving surrogate (BNN by default) and for the
 two cross-check surrogates among GP / RF / BNN, and `acquisition_<ACQ>_<SURROGATE>.png`, the only figure with the
 suggested run as a red star),
 `packet.json`, `llm_prompt.md` (and `llm_review.md` with `--llm`), `summary.txt`; and logs the suggestion in the database.

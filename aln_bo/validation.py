@@ -8,7 +8,7 @@
                    this laptop only run inside WSL next to BoTorch.
 
 Both expose the GP interface (.fit(X, Y) -> self, .predict(X) -> (mean, std), .X, .Y)
-so alchemy_plots draws them the same way. They can also drive the acquisition
+so plots draws them the same way. They can also drive the acquisition
 (MainCampaign(surrogate=...)) and are fitted as cross-checks in every step: if three
 different model families agree on where the minimum is, the conclusion is a property
 of the data, not of the GP kernel.
