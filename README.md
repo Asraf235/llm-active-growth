@@ -8,7 +8,7 @@ of SiO2 before AlN sputtering. A coding agent can run the loop from plain reques
 (`CLAUDE.md` imports it for Claude Code).
 
 The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) by Sumner Harris (BoTorch GP, qLogEI); the package name
-inside Python is `aln_bo`.
+inside Python is `aln_bo`.    
 
 ## Install
 
