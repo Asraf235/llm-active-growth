@@ -64,5 +64,6 @@ aln_bo/       config (spec), store (SQLite), data, surrogate + backends (sklearn
 scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate (alchemy's own classes)
 examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step)
 tests/        python -m pytest tests -q  (synthetic data, every available backend)
+AGENTS.md     instructions for a coding agent operating the loop (CLAUDE.md imports it for Claude Code)
 ```
 
