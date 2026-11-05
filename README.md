@@ -1,10 +1,11 @@
 # llm-active-growth
 
-Active learning for thin-film growth recipes: Bayesian optimisation with a Bayesian neural network, a Gaussian
-process and a random forest as surrogates, a local SQLite campaign database, and an LLM review of every suggestion.
-Built for an AlN seed-layer campaign (plasma oxynitridation of SiO2 before AlN sputtering, the shipped example) and
-written so that one database can hold several growth tools, each with its own parameter spec. A coding agent
-can run the loop from plain requests; `AGENTS.md` tells it how (`CLAUDE.md` imports it for Claude Code).
+Active learning for thin-film growth recipes. Each step fits a Bayesian neural network, a Gaussian process and a
+random forest to the runs so far, proposes the next recipe by expected improvement, and asks an LLM to review it.
+All runs, selections and suggestions live in one local SQLite database. The database can hold several growth
+tools, each with its own parameter spec. The shipped example is an AlN seed-layer campaign: plasma oxynitridation
+of SiO2 before AlN sputtering. A coding agent can run the loop from plain requests; `AGENTS.md` tells it how
+(`CLAUDE.md` imports it for Claude Code).
 
 The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) (BoTorch GP, qLogEI); the package name
 inside Python is `aln_bo`.
