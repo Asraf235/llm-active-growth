@@ -16,7 +16,6 @@ inside Python is `aln_bo`.
 pip install -e .                 # scikit-learn GP, random forest, figures (runs anywhere)
 pip install -e ".[botorch]"      # + BoTorch backend (torch)
 pip install -e ".[bnn]"          # + NeuroBayes BNN (JAX), the default driver of the acquisition
-pip install -e ".[alchemy]"      # + alchemy's own surrogates and plots
 pip install -e ".[llm]"          # + direct API review (Anthropic; ".[llm-openai]" for OpenAI)
 ```
 
@@ -61,7 +60,6 @@ API instead and adds `llm_review.md`).
 ```
 aln_bo/       config (spec), store (SQLite), data, surrogate + backends (sklearn, BoTorch), acquisition,
               campaign, validation (BNN, random forest), plots, llm_review, pipeline, cli
-scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate (alchemy's own classes)
 examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step)
 tests/        python -m pytest tests -q  (synthetic data, every available backend)
 AGENTS.md     instructions for a coding agent operating the loop (CLAUDE.md imports it for Claude Code)

@@ -14,8 +14,8 @@ run a BO step when asked, record results, and keep the database as the single re
   A run added after a selection was saved is still used by that selection (only runs it labels EXCLUDE / OPTIONAL are left out).
 - Derived parameters (ratios, 1/time) are computed from raw knobs at load time. Store raw knob values only.
 - Check the tier before promising a backend: scikit-learn always works; BoTorch needs torch; the BNN (the default driver of
-  the acquisition) needs JAX + NeuroBayes, otherwise pass `--surrogate gp`;
-  `scripts/alchemy_*.py` need the alchemy package. `python -c "import aln_bo; print(aln_bo.available_backends())"` tells you.
+  the acquisition) needs JAX + NeuroBayes, otherwise pass `--surrogate gp`.
+  `python -c "import aln_bo; print(aln_bo.available_backends())"` tells you.
 
 ## Commands
 
@@ -63,7 +63,6 @@ two-sheet AlN log reader; `llm_context` (physics notes the LLM reviewer may use)
 - "I grew it, here are the numbers": `record` against the planned run, then `show`.
 - "Which runs should the model use?": build a selection CSV with a reason per excluded run and save it; do not delete runs.
 - "Compare surrogates": every `step` already draws GP, RF and BNN mean / variance figures for the same runs.
-  With alchemy installed, `scripts/alchemy_step.py` runs alchemy's own surrogates and acquisition end to end.
 
 ## Reading a result
 

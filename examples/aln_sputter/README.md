@@ -22,13 +22,6 @@ aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films --name 
 aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films_rc --target RC_FWHM --name rc_step
 ```
 
-The same step and figures made with alchemy's own surrogate classes and plotting functions (need the `[alchemy]` extra):
-
-```bash
-python scripts/alchemy_step.py runs.csv --runs run_selection_RC.csv --target RC_FWHM --figures --fix-normalize --seed 0
-python scripts/alchemy_plot_surrogate.py "AlN Sputter Log.xlsx" --runs run_selection_RC.csv --target RC_FWHM
-```
-
 ## What one step looks like
 
 `example_step/` is the output of a real step on the 31-run rocking-curve selection, BNN + EI, with the GP and random
