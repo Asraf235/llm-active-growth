@@ -47,7 +47,8 @@ outside an agent session.
 
 ## The spec (what an experiment is)
 
-JSON with: `name`, `display_name`, `description`; `params` (each: `name`, `column`, `low`, `high`, `unit`, `step`,
+JSON with: `name`, `display_name`, `description`; `params` (each: `name`, `column` (heading in the tool's own log; flat
+CSV imports use `name`), `low`, `high`, `unit`, `step`,
 `fixed` for context knobs, optional `encode` for text categories, optional `derive` expression over raw knobs);
 `physical` (raw knob columns that derived parameters use); `physical_from_derived` (how to map a recipe back to the tool);
 `targets` (each: `name`, `column`, `unit`, `minimize`, `role` = main | alt | aux); optional `import` block for the

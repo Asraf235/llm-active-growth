@@ -1,4 +1,4 @@
-data: results/aln_sputter_sioxny/step_2026-11-04_bnn/cleaned_runs.csv
+data: campaign.sqlite, experiment aln_sputter_sioxny, selection thin_films_rc
 usable runs: 31   rows per target: {'FWHM': 31, 'RC_FWHM': 31, 'SiOxNy_thick': 15, 'SiOxNy_rough': 15, 'AlN_density': 31}
 backend: botorch  (available: ['sklearn', 'botorch']);  kernel: rbf;  surrogate: bnn
 
@@ -79,4 +79,4 @@ figures (12^5 grid): BNN_mean.png, BNN_variance.png, acquisition_EI_BNN.png
 cross-check GP: at the suggestion 2.9211 +/- 0.5025  (figures GP_mean.png, GP_variance.png)
 cross-check RF: at the suggestion 2.8189 +/- 0.1027  (figures RF_mean.png, RF_variance.png)
 
-(LLM review not requested; prompt written to results/aln_sputter_sioxny/step_2026-11-04_bnn_final/llm_prompt.md)
+(LLM review not requested; prompt written to results/aln_sputter_sioxny/<timestamp>/llm_prompt.md)

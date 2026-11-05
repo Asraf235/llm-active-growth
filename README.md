@@ -28,8 +28,9 @@ Gaussian process chooses instead.
 1. **Spec.** Copy `examples/aln_sputter/spec.json`: for each knob its bounds, unit, instrument step and `fixed` if it
    is context the optimiser must not move; `derive` expressions for physics-informed parameters (a gas ratio, 1/time);
    for each target whether to minimise and its role (`main`, `alt`, `aux`); `llm_context` for the reviewer.
-2. **Register and import.** `aln-bo register DB spec.json`, then `aln-bo import DB EXPERIMENT runs.csv` (one row per
-   run; repeated run numbers are repeat measurements). Your spreadsheet is never written to; `aln-bo export` makes one.
+2. **Register and import.** `aln-bo register DB spec.json`, then `aln-bo import DB EXPERIMENT runs.csv`: one row per
+   run, columns named as the spec's knobs and targets (`examples/TEMPLATE_runs.csv` has the header), repeated run
+   numbers are repeat measurements. Your spreadsheet is never written to; `aln-bo export` makes one.
 3. **Select runs.** `aln-bo select DB EXPERIMENT NAME selection.csv` saves a named list with a reason per run
    (INCLUDE / OPTIONAL / EXCLUDE). Fits use a named selection, so every suggestion is reproducible.
 4. **Loop.** Suggest, grow, record, suggest again:

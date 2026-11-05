@@ -16,8 +16,8 @@ Growth time enters the model as 1/t (against t the data are a cliff then a plate
 aln-bo init campaign.sqlite
 aln-bo register campaign.sqlite examples/aln_sputter/spec.json
 aln-bo import  campaign.sqlite aln_sputter_sioxny "AlN Sputter Log.xlsx" --sputter-log
-aln-bo select  campaign.sqlite aln_sputter_sioxny thin_films    data/run_selection.csv
-aln-bo select  campaign.sqlite aln_sputter_sioxny thin_films_rc data/run_selection_RC.csv
+aln-bo select  campaign.sqlite aln_sputter_sioxny thin_films    run_selection.csv
+aln-bo select  campaign.sqlite aln_sputter_sioxny thin_films_rc run_selection_RC.csv
 aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films --name fwhm_step
 aln-bo step    campaign.sqlite aln_sputter_sioxny --selection thin_films_rc --target RC_FWHM --name rc_step
 ```
