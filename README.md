@@ -33,17 +33,28 @@ Gaussian process chooses instead.
    run; repeated run numbers are repeat measurements). Your spreadsheet is never written to; `aln-bo export` makes one.
 3. **Select runs.** `aln-bo select DB EXPERIMENT NAME selection.csv` saves a named list with a reason per run
    (INCLUDE / OPTIONAL / EXCLUDE). Fits use a named selection, so every suggestion is reproducible.
-4. **Loop.** `step` → grow → `record` → `step`. `step` prints the suggested recipe in tool units with its predicted
-   value and uncertainty, writes the figures and the LLM packet to `results/<experiment>/<timestamp>/`, and logs the
-   suggestion in the database. `--plan` inserts it as a planned run so the measured result can be recorded against it.
-   Without `pip install`, use `python -m aln_bo.cli`.
+4. **Loop.** Suggest, grow, record, suggest again:
+
+   ```bash
+   aln-bo step   DB EXPERIMENT --selection NAME --plan          # fit, suggest, draw; the suggestion becomes a planned run
+   aln-bo record DB EXPERIMENT RUN RC_FWHM=2.1                  # enter what you measured for that run
+   aln-bo step   DB EXPERIMENT --selection NAME --plan          # next suggestion, now including the new run
+   ```
+
+   `step` prints the suggested recipe in tool units with its predicted value and uncertainty, writes its outputs to
+   `results/<experiment>/<timestamp>/` and logs the suggestion in the database. Options: `--target` (default: the main
+   target), `--surrogate bnn|gp|rf`, `--acq ei|lcb`, `--q N` for a batch. A suggestion made without `--plan` can be turned
+   into a planned run later with `aln-bo plan DB EXPERIMENT --suggestion ID`. Without `pip install`, use
+   `python -m aln_bo.cli` in place of `aln-bo`.
 
 ## Output of a step
 
-Seven projection maps: mean and variance of the driving surrogate (BNN by default) and of the
-two cross-check surrogates (GP, random forest), and the acquisition with the suggested run as a red star. Markers
-grow with the number of runs stacked at a setting. Also `suggestion.csv`, `alternatives.csv`, `packet.json`,
-`llm_prompt.md` (the review prompt an agent answers; no API key needed) and `summary.txt`.
+Seven projection maps: mean and variance of the driving surrogate (BNN by default) and of the two cross-check
+surrogates (GP, random forest), and the acquisition with the suggested run as a red star. Markers grow with the
+number of runs stacked at a setting. Files: `summary.txt` (what was printed), `suggestion.csv` and
+`alternatives.csv` (recipes in tool units with predictions), `cleaned_runs.csv` (the runs the models were fitted on),
+`packet.json` and `llm_prompt.md` (the review prompt; a coding agent answers it directly, `--llm` sends it to a model
+API instead and adds `llm_review.md`).
 
 ## Layout
 
