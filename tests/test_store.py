@@ -18,7 +18,7 @@ from aln_bo.pipeline import run_step
 @pytest.fixture(scope="module")
 def flat(tmp_path_factory):
     out = tmp_path_factory.mktemp("d") / "runs.csv"
-    subprocess.run([sys.executable, str(ROOT / "scripts/make_synthetic_data.py"), "--n", "20", "--out", str(out)],
+    subprocess.run([sys.executable, str(ROOT / "tests/make_synthetic_data.py"), "--n", "20", "--out", str(out)],
                    check=True, capture_output=True)
     return pd.read_csv(out)
 

@@ -21,7 +21,7 @@ LOG = ROOT / "AlN Sputter Log.xlsx"
 @pytest.fixture(scope="module")
 def ds(tmp_path_factory):
     out = tmp_path_factory.mktemp("d") / "runs.csv"
-    subprocess.run([sys.executable, str(ROOT / "scripts/make_synthetic_data.py"), "--n", "25", "--out", str(out)],
+    subprocess.run([sys.executable, str(ROOT / "tests/make_synthetic_data.py"), "--n", "25", "--out", str(out)],
                    check=True, capture_output=True)
     return load_dataset(out)
 

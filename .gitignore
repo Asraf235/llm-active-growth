@@ -11,8 +11,5 @@ results_paper*/
 
 # private campaign data
 *.xlsx
-!examples/synthetic/four_runs.xlsx
 data/run_selection*.csv
-examples/synthetic/results/
-examples/synthetic/runs.csv
 *.pptx

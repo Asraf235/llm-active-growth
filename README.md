@@ -22,22 +22,6 @@ pip install -e ".[llm]"          # + direct API review (Anthropic; ".[llm-openai
 Python 3.11 or newer. Without the `[bnn]` extra pass `--surrogate gp`. On Windows with Smart App Control on, torch
 and JAX do not load; run those tiers in WSL.
 
-## Five minutes on synthetic data
-
-```bash
-python scripts/make_synthetic_data.py --n 30 --out examples/synthetic/runs.csv
-aln-bo init     demo.sqlite
-aln-bo register demo.sqlite examples/aln_sputter/spec.json
-aln-bo import   demo.sqlite aln_sputter_sioxny examples/synthetic/runs.csv
-aln-bo step     demo.sqlite aln_sputter_sioxny --surrogate gp --plan
-aln-bo record   demo.sqlite aln_sputter_sioxny 31 FWHM=0.29
-aln-bo step     demo.sqlite aln_sputter_sioxny --surrogate gp
-```
-
-`step` prints the suggested recipe in tool units with its predicted value and uncertainty, writes the figures and the
-LLM packet to `results/<experiment>/<timestamp>/`, and logs the suggestion in the database. `--plan` inserts it as a
-planned run so the measured result can be recorded against it. Without `pip install`, use `python -m aln_bo.cli`.
-
 ## Your own process
 
 1. **Spec.** Copy `examples/aln_sputter/spec.json`: for each knob its bounds, unit, instrument step and `fixed` if it
@@ -47,7 +31,10 @@ planned run so the measured result can be recorded against it. Without `pip inst
    run; repeated run numbers are repeat measurements). Your spreadsheet is never written to; `aln-bo export` makes one.
 3. **Select runs.** `aln-bo select DB EXPERIMENT NAME selection.csv` saves a named list with a reason per run
    (INCLUDE / OPTIONAL / EXCLUDE). Fits use a named selection, so every suggestion is reproducible.
-4. **Loop.** `step` → grow → `record` → `step`.
+4. **Loop.** `step` → grow → `record` → `step`. `step` prints the suggested recipe in tool units with its predicted
+   value and uncertainty, writes the figures and the LLM packet to `results/<experiment>/<timestamp>/`, and logs the
+   suggestion in the database. `--plan` inserts it as a planned run so the measured result can be recorded against it.
+   Without `pip install`, use `python -m aln_bo.cli`.
 
 ## Output of a step
 
@@ -61,9 +48,8 @@ grow with the number of runs stacked at a setting. Also `suggestion.csv`, `alter
 ```
 aln_bo/       config (spec), store (SQLite), data, surrogate + backends (sklearn, BoTorch), acquisition,
               campaign, validation (BNN, random forest), plots, llm_review, pipeline, cli
-scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate, make_synthetic_data
-examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step),
-              synthetic (demo loop, four-run sheet)
-tests/        python -m pytest tests -q
+scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate (alchemy's own classes)
+examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step)
+tests/        python -m pytest tests -q  (synthetic data, every available backend)
 ```
 
