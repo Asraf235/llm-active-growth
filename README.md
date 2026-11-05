@@ -62,8 +62,8 @@ grow with the number of runs stacked at a setting. Also `suggestion.csv`, `alter
 aln_bo/       config (spec), store (SQLite), data, surrogate + backends (sklearn, BoTorch), acquisition,
               campaign, validation (BNN, random forest), alchemy_plots, llm_review, pipeline, cli
 scripts/      run_pipeline (a step on a file, no database), alchemy_step, alchemy_plot_surrogate, make_synthetic_data
-examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec + notes), synthetic (demo loop, four-run sheet)
+examples/     TEMPLATE_runs.csv (import columns), aln_sputter (spec, notes, figures of one real step),
+              synthetic (demo loop, four-run sheet)
 tests/        python -m pytest tests -q
-docs/         why projections rather than slices, why growth time enters as 1/t
 ```
 

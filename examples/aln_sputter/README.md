@@ -10,7 +10,7 @@ with the project's own reader (`aln_bo.data.load_sputter_log`), which joins the 
 cleans text cells, averages repeat XRD rows and drops the runs the log marks as scrapped. The run selections used
 in the campaign (`thin_films`: 34 runs at one AlN recipe; `thin_films_rc`: 31 runs, three rocking-curve outliers
 removed) are CSVs with `run, GPBO, reason` columns kept next to the workbook.
-Growth time enters the model as 1/t: see [../../docs/growth_time_vs_inverse.png](../../docs/growth_time_vs_inverse.png).
+Growth time enters the model as 1/t (against t the data are a cliff then a plateau, which broke the RBF lengthscales).
 
 ```bash
 aln-bo init campaign.sqlite
@@ -28,3 +28,10 @@ The same step and figures made with alchemy's own surrogate classes and plotting
 python scripts/alchemy_step.py runs.csv --runs run_selection_RC.csv --target RC_FWHM --figures --fix-normalize --seed 0
 python scripts/alchemy_plot_surrogate.py "AlN Sputter Log.xlsx" --runs run_selection_RC.csv --target RC_FWHM
 ```
+
+## What one step looks like
+
+`example_step/` is the output of a real step on the 31-run rocking-curve selection, BNN + EI, with the GP and random
+forest as cross-checks: the seven figures (`BNN_mean.png`, `BNN_variance.png`, `GP_*.png`, `RF_*.png`,
+`acquisition_EI_BNN.png` with the suggested run as the red star), `summary.txt`, `suggestion.csv` and
+`alternatives.csv`. The run table and the LLM packet are left out, since they hold the campaign data.

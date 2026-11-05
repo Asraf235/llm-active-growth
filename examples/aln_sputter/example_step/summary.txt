@@ -1,0 +1,82 @@
+data: results/aln_sputter_sioxny/step_2026-11-04_bnn/cleaned_runs.csv
+usable runs: 31   rows per target: {'FWHM': 31, 'RC_FWHM': 31, 'SiOxNy_thick': 15, 'SiOxNy_rough': 15, 'AlN_density': 31}
+backend: botorch  (available: ['sklearn', 'botorch']);  kernel: rbf;  surrogate: bnn
+
+=== main surrogate bnn + numpy EI: RC_FWHM (minimise) on 31 runs ===
+best run at the fixed context (InvGrowth=0.0769231, WorkP=1.7, StageMax=1, OxyFlow=40):
+run              75.0
+OxyT            600.0
+OxyBias          50.0
+N2frac            0.5
+OxyP             20.0
+OxyTime          10.0
+InvGrowth    0.076923
+WorkP             1.7
+StageMax          1.0
+OxyFlow          40.0
+OxyAr            20.0
+OxyN2            20.0
+GrowthT          13.0
+RC_FWHM       2.02187
+best run over any context:
+run           33.0
+OxyT         600.0
+OxyBias       50.0
+N2frac         0.5
+OxyP          20.0
+OxyTime       10.0
+InvGrowth      0.1
+WorkP          2.0
+StageMax       1.0
+OxyFlow       40.0
+OxyAr         20.0
+OxyN2         20.0
+GrowthT       10.0
+RC_FWHM      1.934
+EI incumbent (best surrogate mean at the fixed context): 2.2631
+learned noise std: n/a (not a GP)
+importance (surrogate importance): n/a
+irrelevant knobs pinned to the best in-context run: []
+
+=== auxiliary GPs (prediction only) ===
+SiOxNy_thick: 15 runs, lengthscales {'OxyT': 0.266, 'OxyBias': 0.202, 'N2frac': 2.793, 'OxyP': 0.693, 'OxyTime': 0.618, 'InvGrowth': 0.693, 'WorkP': 190.258, 'StageMax': 0.693, 'OxyFlow': 3.323}
+SiOxNy_rough: 15 runs, lengthscales {'OxyT': 0.0, 'OxyBias': 32.189, 'N2frac': 0.0, 'OxyP': 0.693, 'OxyTime': 21.844, 'InvGrowth': 0.693, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 15.659}
+AlN_density: 31 runs, lengthscales {'OxyT': 11.468, 'OxyBias': 15.686, 'N2frac': 4.022, 'OxyP': 1.048, 'OxyTime': 6.848, 'InvGrowth': 10.708, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 4.904}
+
+SUGGESTED NEXT SAMPLE (acquisition maximum):
+                              0
+OxyT                   675.0000
+OxyBias                  0.0000
+N2frac                   0.7500
+OxyP                     5.0000
+OxyTime                 27.0000
+InvGrowth                0.0769
+WorkP                    1.7000
+StageMax                 1.0000
+OxyFlow                 40.0000
+OxyAr                   10.0000
+OxyN2                   30.0000
+GrowthT                 13.0000
+pred_RC_FWHM             2.6006
+pred_RC_FWHM_std         1.5540
+EI                       0.4658
+pred_SiOxNy_thick        3.2067
+pred_SiOxNy_thick_std    0.5098
+pred_SiOxNy_rough        0.6070
+pred_SiOxNy_rough_std    0.7496
+pred_AlN_density         3.2603
+pred_AlN_density_std     0.0679
+
+next-best alternatives:
+ OxyT  OxyBias  N2frac  OxyP  OxyTime  InvGrowth  WorkP  StageMax  OxyFlow  OxyAr  OxyN2  GrowthT  pred_RC_FWHM  pred_RC_FWHM_std     EI  pred_SiOxNy_thick  pred_SiOxNy_thick_std  pred_SiOxNy_rough  pred_SiOxNy_rough_std  pred_AlN_density  pred_AlN_density_std
+700.0     45.0    0.75  10.0     28.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2968            1.1375 0.4371             3.2067                 0.5098              0.607                 0.7496            3.2593                0.0564
+650.0     60.0    0.75   5.0     24.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2918            1.0856 0.4189             3.2067                 0.5098              0.607                 0.7496            3.2619                0.0666
+600.0     55.0    0.25   5.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.5223            1.3836 0.4320             3.2067                 0.5098              0.607                 0.7496            3.2612                0.0678
+675.0      0.0    0.50   5.0     29.0     0.0769    1.7       1.0     40.0   20.0   20.0     13.0        2.6542            1.5023 0.4240             3.2067                 0.5098              0.607                 0.7496            3.2641                0.0608
+700.0     45.0    0.25  15.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.4298            1.1546 0.3820             3.2067                 0.5098              0.607                 0.7496            3.2529                0.0487
+
+figures (12^5 grid): BNN_mean.png, BNN_variance.png, acquisition_EI_BNN.png
+cross-check GP: at the suggestion 2.9211 +/- 0.5025  (figures GP_mean.png, GP_variance.png)
+cross-check RF: at the suggestion 2.8189 +/- 0.1027  (figures RF_mean.png, RF_variance.png)
+
+(LLM review not requested; prompt written to results/aln_sputter_sioxny/step_2026-11-04_bnn_final/llm_prompt.md)
