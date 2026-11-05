@@ -22,8 +22,7 @@ pip install -e ".[llm]"          # + direct API review (Anthropic; ".[llm-openai
 
 Python 3.11 or newer. By default `aln-bo step` lets the Bayesian neural network choose the next recipe, which needs
 the `[bnn]` extra (JAX and NeuroBayes). With only the base install, add `--surrogate gp` to the command so the
-Gaussian process chooses instead. On Windows with Smart App Control on, torch and JAX do not load; run those
-tiers in WSL.
+Gaussian process chooses instead.
 
 ## Your own process
 
