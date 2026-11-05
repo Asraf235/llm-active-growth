@@ -24,7 +24,7 @@ Python 3.11 or newer. By default `aln-bo step` lets the Bayesian neural network 
 the `[bnn]` extra (JAX and NeuroBayes). With only the base install, add `--surrogate gp` to the command so the
 Gaussian process chooses instead.
 
-## Your own process
+## How to use
 
 1. **Spec.** Copy `examples/aln_sputter/spec.json`: for each knob its bounds, unit, instrument step and `fixed` if it
    is context the optimiser must not move; `derive` expressions for physics-informed parameters (a gas ratio, 1/time);
