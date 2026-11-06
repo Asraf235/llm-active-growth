@@ -35,8 +35,8 @@ aln-bo export    DB EXPERIMENT out.xlsx|.csv            runs, measurements, sele
 
 `step` writes `results/<experiment>/<name>/`: `suggestion.csv`, `alternatives.csv`, the figures (projection
 maps: `<SURROGATE>_mean.png` and `<SURROGATE>_variance.png` for the driving surrogate (BNN by default) and for the
-two cross-check surrogates among GP / RF / BNN, and `acquisition_<ACQ>_<SURROGATE>.png`, the only figure with the
-suggested run as a red star),
+two cross-check surrogates among GP / RF / BNN, `acquisition_<ACQ>_<SURROGATE>.png`, the only figure with the
+suggested run as a red star, and `<METRIC>_GP_mean.png` / `<METRIC>_GP_variance.png` for every secondary metric),
 `packet.json`, `llm_prompt.md` (and `llm_review.md` with `--llm`), `summary.txt`; and logs the suggestion in the database.
 `--plan` also inserts the suggestion as a planned run so results can be recorded against it.
 
@@ -51,8 +51,29 @@ JSON with: `name`, `display_name`, `description`; `params` (each: `name`, `colum
 CSV imports use `name`), `low`, `high`, `unit`, `step`,
 `fixed` for context knobs, optional `encode` for text categories, optional `derive` expression over raw knobs);
 `physical` (raw knob columns that derived parameters use); `physical_from_derived` (how to map a recipe back to the tool);
-`targets` (each: `name`, `column`, `unit`, `minimize`, `role` = main | alt | aux); optional `import` block for the
+`targets` (each: `name`, `column`, `unit`, `minimize`, `role` = main | alt | aux, where aux = secondary metric); optional `import` block for the
 two-sheet AlN log reader; `llm_context` (physics notes the LLM reviewer may use). `examples/aln_sputter/spec.json` is a full example.
+
+## Secondary metrics
+
+Besides the primary optimisation objective (role `main`, or the `alt` target chosen with `--target`), the user can
+specify one or more additional measured quantities for surrogate modelling, called secondary metrics (spec role `aux`;
+in the AlN example: SiOxNy thickness and roughness, AlN density). Rules:
+
+- The acquisition function is calculated for the primary objective only. Secondary metrics never drive the suggestion.
+- Every `step` fits one GP per secondary metric on the runs that have it (at least 3), predicts it at the suggestion and
+  at each alternative (`pred_<METRIC>`, `pred_<METRIC>_std` in `suggestion.csv` / `alternatives.csv` / the packet), and
+  draws its mean and variance maps (`<METRIC>_GP_mean.png`, `<METRIC>_GP_variance.png`) on the same knob grid as the
+  objective maps, with the runs that have that metric marked.
+- Use them as additional information: when reviewing a suggestion (reject a recipe predicted to roughen the film or
+  thin the interlayer, prefer an alternative with a similar objective but better secondary predictions), and when
+  explaining observed results to the user (say which knobs the secondary GPs find influential and how the maps relate
+  to the objective map).
+- To add one: add a target with `"role": "aux"` to the spec, `register --replace`, and supply its values: a column
+  named like the target in the imported runs file, or `aln-bo record DB EXPERIMENT RUN <METRIC>=value` (several
+  `target=value` pairs in one call are fine, e.g. `RC_FWHM=2.1 SiOxNy_rough=0.6`). Values are stored in the
+  experiment's runs and measurements tables like any target; `aln-bo show` and `aln-bo export` include them.
+- To promote a secondary metric to the objective, change its role to `alt` (or `main`) and re-register; `--target` then selects it.
 
 ## Typical requests and what to do
 
@@ -61,13 +82,14 @@ two-sheet AlN log reader; `llm_context` (physics notes the LLM reviewer may use)
 - "Suggest the next run": `step` with the right `--target` and `--selection`; report the recipe in raw tool units
   (the suggestion table carries them), the predicted value with its std, the best run so far, and which knobs the GP
   calls irrelevant. If the suggestion sits on a bound, say so.
-- "I grew it, here are the numbers": `record` against the planned run, then `show`.
+- "I grew it, here are the numbers": `record` against the planned run (objective and secondary metrics in one call), then `show`.
 - "Which runs should the model use?": build a selection CSV with a reason per excluded run and save it; do not delete runs.
 - "Compare surrogates": every `step` already draws GP, RF and BNN mean / variance figures for the same runs.
 
 ## Reading a result
 
-- `pred_<target>` and `pred_<target>_std`: GP mean and std at the recipe. A std comparable to the data scatter means extrapolation.
+- `pred_<target>` and `pred_<target>_std`: GP mean and std at the recipe (objective and secondary metrics alike). A std comparable
+  to the data scatter means extrapolation.
 - `EI`: expected improvement over the best GP mean at the fixed context. Near zero everywhere means the data do not support a trend.
 - Lengthscales: small = influential; at the upper bound (10 in scikit-learn, very large in BoTorch) = irrelevant, and such knobs
   are pinned to the best in-context run instead of being moved.

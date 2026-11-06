@@ -8,7 +8,7 @@ opinion with domain knowledge:
 
 Inputs (the "packet", build_packet): the objective and its goal, the parameters with roles and
 bounds, the best runs (any context and at the fixed context), the GP suggestion with its
-predicted value +/- std and acquisition value, the auxiliary predictions at that recipe, the
+predicted value +/- std and acquisition value, the secondary-metric predictions at that recipe, the
 next-best alternatives with the same predictions, the ARD lengthscales, the observed runs, and
 the acquisition figure. The system prompt is built from the live spec (system_prompt): experiment
 description, objective, and the spec's `llm_context` physics notes. Output: strict JSON, parsed
@@ -54,7 +54,10 @@ How to read the inputs
 - The acquisition value (EI, Expected Improvement, unless stated otherwise) is the engine's score: large
   when the GP expects a better objective than the best run so far OR is very uncertain there. The main
   suggestion is its maximum.
-- Auxiliary GPs predict secondary properties; they are descriptive, the user did not ask to optimise them.
+- Secondary metrics (spec role `aux`) each have their own GP: pred_<metric> and pred_<metric>_std at a recipe,
+  and mean / variance maps (<metric>_GP_mean.png, <metric>_GP_variance.png). The acquisition is computed for
+  the objective only. Use the secondary metrics as additional evidence when judging the suggestion (e.g. a
+  recipe predicted to roughen or thin the film) and when explaining observed results; do not optimise them.
 - ARD lengthscales are in normalised [0,1] units; a SMALL value means the target changes quickly along
   that parameter (influential), a value near the upper bound means the parameter looks irrelevant.
 - Context parameters are held fixed by the engine (they are part of the standard recipe); do not
@@ -67,7 +70,7 @@ Decision rules
 - ACCEPT the engine's suggestion when it is plausible, safe for the tool, and either exploits a
   credible trend or explores a region the data genuinely do not cover.
 - REJECT it when it extrapolates into a corner with no supporting data for a dubious physical reason,
-  when the auxiliary predictions indicate an obviously bad outcome, when it duplicates an existing
+  when the secondary-metric predictions indicate an obviously bad outcome, when it duplicates an existing
   run within instrument resolution, or when a listed alternative is clearly better justified.
 - If you reject, propose ONE concrete alternative recipe. Prefer one of the listed alternatives; you
   may adjust values, but stay inside the bounds and on the instrument grid (steps given).
@@ -165,14 +168,18 @@ def packet_to_markdown(packet: dict) -> str:
               json.dumps(packet["best_run_at_fixed_context"], indent=1), "```",
               "", "## Best run over any context (for reference; different growth time)", "```json",
               json.dumps(packet["best_run_any_context"], indent=1), "```",
-              "", "## Main GP suggestion (EI maximum) with auxiliary predictions",
+              "", "## Main GP suggestion (EI maximum) with secondary-metric predictions",
               md_table(pd.DataFrame(packet["main_gp_suggestion"])), "",
               "## Next-best alternatives by EI (distinct recipes)",
               md_table(pd.DataFrame(packet["alternatives_by_EI"])), "",
               "## ARD lengthscales (small = influential)",
               f"main: {packet['main_gp_lengthscales']}"]
     for name, info in packet["auxiliary_models"].items():
-        lines.append(f"{name}: n={info['n_runs']}, lengthscales={info['lengthscales']}, observed={info['observed_range']}")
+        lines.append(f"secondary metric {name}: n={info['n_runs']}, lengthscales={info['lengthscales']}, observed={info['observed_range']}")
+    if packet.get("secondary_metric_figures"):
+        lines += ["", "## Secondary-metric maps (GP mean / variance on the same knob grid; look at them alongside the objective maps)"]
+        for name, info in packet["secondary_metric_figures"].items():
+            lines.append(f"- {name}: {', '.join(info['figures'])} ({info['n_runs']} runs)")
     lines += ["", "## All observed runs (sorted by objective)",
               md_table(pd.DataFrame(packet["observed_runs_sorted_by_objective"])), ""]
     return "\n".join(lines)

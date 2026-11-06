@@ -3,7 +3,7 @@
 This is the body of the step made callable, so the CLI, the scripts and an agent all run the same code.
 Everything is written to `out`; the return value carries the objects.
 
-Figures (projection maps, see plots.py):
+Figures (projection maps, see plots.py; plus <metric>_GP_mean / _variance for every secondary metric):
     <LABEL>_mean.png, <LABEL>_variance.png      the driving surrogate (BNN by default; GP or RF with surrogate=...)
     acquisition_<ACQ>_<LABEL>.png               its acquisition with the suggested next run as a red star (the only starred figure)
     <OTHER>_mean.png, <OTHER>_variance.png      the other two of GP / RF / BNN fitted to the same runs, as cross-checks
@@ -66,7 +66,7 @@ def run_step(ds, out: str | Path, *, target: Optional[str] = None, q: int = 1, n
 
     # ---- auxiliary GPs
     aux = AuxModels(ds, backend=backend, kernel=kernel).fit()
-    say("\n=== auxiliary GPs (prediction only) ===")
+    say("\n=== secondary metrics (one GP each, prediction only; the acquisition is computed for the objective only) ===")
     for t in cfg.AUX:
         say(f"{t.name}: {aux.n_rows.get(t.name)} runs" + (f", lengthscales {aux.importance()[t.name]}" if t.name in aux.models else "  (too few runs, skipped)"))
     aux_sug = aux.predict(sug[PARAM_NAMES].to_numpy())
@@ -109,9 +109,20 @@ def run_step(ds, out: str | Path, *, target: Optional[str] = None, q: int = 1, n
             checks[other] = {"mean": float(ms[0]), "std": float(ss[0])}
             say(f"cross-check {other}: at the suggestion {ms[0]:.4f} +/- {ss[0]:.4f}  (figures {other}_mean.png, {other}_variance.png)")
 
+    # ---- secondary metrics: GP mean / variance maps on the same grid (no acquisition for them)
+    secondary = {}
+    for name, g in aux.models.items():
+        Xa, Ya = aux.data[name]
+        mo = plots.evaluate(lambda X, g=g: g.predict(X)[0], XG)
+        so = plots.evaluate(lambda X, g=g: g.predict(X)[1], XG)
+        figs = plots.surrogate_figures(mo, so ** 2, grids, Xa, Ya, names, f"{name}_GP", out, target=f"{name} (secondary metric)")
+        secondary[name] = {"n_runs": int(aux.n_rows[name]), "figures": [f.name for f in figs.values()]}
+        say(f"secondary metric {name}: {aux.n_rows[name]} runs; figures {name}_GP_mean.png, {name}_GP_variance.png")
+
     # ---- LLM packet / review
     packet = llm_review.build_packet(main_c, aux, sug, alt, ds, aux_sug, aux_alt)
     packet["cross_check_at_suggestion"] = checks
+    packet["secondary_metric_figures"] = secondary
     (out / "packet.json").write_text(json.dumps(packet, indent=1, default=float), encoding="utf-8")
     llm_review.write_prompt_file(packet, out / "llm_prompt.md")
     review = None

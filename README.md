@@ -27,7 +27,8 @@ Gaussian process chooses instead.
 
 1. **Spec.** Copy `examples/aln_sputter/spec.json`: for each knob its bounds, unit, instrument step and `fixed` if it
    is context the optimiser must not move; `derive` expressions for physics-informed parameters (a gas ratio, 1/time);
-   for each target whether to minimise and its role (`main`, `alt`, `aux`); `llm_context` for the reviewer.
+   for each target whether to minimise and its role (`main` = the objective, `alt` = another objective selectable
+   with `--target`, `aux` = a secondary metric that is modelled but not optimised); `llm_context` for the reviewer.
 2. **Register and import.** `aln-bo register DB spec.json`, then `aln-bo import DB EXPERIMENT runs.csv`: one row per
    run, columns named as the spec's knobs and targets (`examples/TEMPLATE_runs.csv` has the header), repeated run
    numbers are repeat measurements. Your spreadsheet is never written to; `aln-bo export` makes one.
@@ -51,7 +52,9 @@ Gaussian process chooses instead.
 
 Seven projection maps: mean and variance of the driving surrogate (BNN by default) and of the two cross-check
 surrogates (GP, random forest), and the acquisition with the suggested run as a red star. Markers grow with the
-number of runs stacked at a setting. Files: `summary.txt` (what was printed), `suggestion.csv` and
+number of runs stacked at a setting. Secondary metrics (spec role `aux`, e.g. film thickness or roughness) get their
+own GP and a mean / variance map pair each; they inform the review but never drive the acquisition. Files:
+`summary.txt` (what was printed), `suggestion.csv` and
 `alternatives.csv` (recipes in tool units with predictions), `cleaned_runs.csv` (the runs the models were fitted on),
 `packet.json` and `llm_prompt.md` (the review prompt; a coding agent answers it directly, `--llm` sends it to a model
 API instead and adds `llm_review.md`).

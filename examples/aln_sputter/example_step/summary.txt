@@ -1,5 +1,6 @@
 data: campaign.sqlite, experiment aln_sputter_sioxny, selection thin_films_rc
-usable runs: 31   rows per target: {'FWHM': 31, 'RC_FWHM': 31, 'SiOxNy_thick': 15, 'SiOxNy_rough': 15, 'AlN_density': 31}
+usable runs: 38   rows per target: {'FWHM': 31, 'RC_FWHM': 31, 'SiOxNy_thick': 16, 'SiOxNy_rough': 16, 'AlN_density': 32}
+dropped 22 rows - not in the selected run set: runs 1, 2, 15, 16, 17, 22, 24, 25, 26, 28, 29, 35, 55, 66, 66.5, 70, 71, 72, 76, 79, 80, 81
 backend: botorch  (available: ['sklearn', 'botorch']);  kernel: rbf;  surrogate: bnn
 
 === main surrogate bnn + numpy EI: RC_FWHM (minimise) on 31 runs ===
@@ -38,10 +39,10 @@ learned noise std: n/a (not a GP)
 importance (surrogate importance): n/a
 irrelevant knobs pinned to the best in-context run: []
 
-=== auxiliary GPs (prediction only) ===
-SiOxNy_thick: 15 runs, lengthscales {'OxyT': 0.266, 'OxyBias': 0.202, 'N2frac': 2.793, 'OxyP': 0.693, 'OxyTime': 0.618, 'InvGrowth': 0.693, 'WorkP': 190.258, 'StageMax': 0.693, 'OxyFlow': 3.323}
-SiOxNy_rough: 15 runs, lengthscales {'OxyT': 0.0, 'OxyBias': 32.189, 'N2frac': 0.0, 'OxyP': 0.693, 'OxyTime': 21.844, 'InvGrowth': 0.693, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 15.659}
-AlN_density: 31 runs, lengthscales {'OxyT': 11.468, 'OxyBias': 15.686, 'N2frac': 4.022, 'OxyP': 1.048, 'OxyTime': 6.848, 'InvGrowth': 10.708, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 4.904}
+=== secondary metrics (one GP each, prediction only; the acquisition is computed for the objective only) ===
+SiOxNy_thick: 16 runs, lengthscales {'OxyT': 0.266, 'OxyBias': 0.198, 'N2frac': 1.352, 'OxyP': 0.693, 'OxyTime': 0.619, 'InvGrowth': 0.693, 'WorkP': 3.594, 'StageMax': 0.693, 'OxyFlow': 631.301}
+SiOxNy_rough: 16 runs, lengthscales {'OxyT': 0.0, 'OxyBias': 58.584, 'N2frac': 34.405, 'OxyP': 0.693, 'OxyTime': 29.873, 'InvGrowth': 0.693, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 37.235}
+AlN_density: 32 runs, lengthscales {'OxyT': 10.533, 'OxyBias': 16.6, 'N2frac': 9.816, 'OxyP': 1.073, 'OxyTime': 7.86, 'InvGrowth': 10.428, 'WorkP': 0.0, 'StageMax': 0.693, 'OxyFlow': 6.31}
 
 SUGGESTED NEXT SAMPLE (acquisition maximum):
                               0
@@ -60,23 +61,26 @@ GrowthT                 13.0000
 pred_RC_FWHM             2.6006
 pred_RC_FWHM_std         1.5540
 EI                       0.4658
-pred_SiOxNy_thick        3.2067
-pred_SiOxNy_thick_std    0.5098
-pred_SiOxNy_rough        0.6070
-pred_SiOxNy_rough_std    0.7496
-pred_AlN_density         3.2603
-pred_AlN_density_std     0.0679
+pred_SiOxNy_thick        3.1986
+pred_SiOxNy_thick_std    0.5023
+pred_SiOxNy_rough        0.7959
+pred_SiOxNy_rough_std    0.7998
+pred_AlN_density         3.2666
+pred_AlN_density_std     0.0592
 
 next-best alternatives:
  OxyT  OxyBias  N2frac  OxyP  OxyTime  InvGrowth  WorkP  StageMax  OxyFlow  OxyAr  OxyN2  GrowthT  pred_RC_FWHM  pred_RC_FWHM_std     EI  pred_SiOxNy_thick  pred_SiOxNy_thick_std  pred_SiOxNy_rough  pred_SiOxNy_rough_std  pred_AlN_density  pred_AlN_density_std
-700.0     45.0    0.75  10.0     28.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2968            1.1375 0.4371             3.2067                 0.5098              0.607                 0.7496            3.2593                0.0564
-650.0     60.0    0.75   5.0     24.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2918            1.0856 0.4189             3.2067                 0.5098              0.607                 0.7496            3.2619                0.0666
-600.0     55.0    0.25   5.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.5223            1.3836 0.4320             3.2067                 0.5098              0.607                 0.7496            3.2612                0.0678
-675.0      0.0    0.50   5.0     29.0     0.0769    1.7       1.0     40.0   20.0   20.0     13.0        2.6542            1.5023 0.4240             3.2067                 0.5098              0.607                 0.7496            3.2641                0.0608
-700.0     45.0    0.25  15.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.4298            1.1546 0.3820             3.2067                 0.5098              0.607                 0.7496            3.2529                0.0487
+700.0     45.0    0.75  10.0     28.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2968            1.1375 0.4371             3.1986                 0.5023             0.7959                 0.7998            3.2651                0.0453
+650.0     60.0    0.75   5.0     24.0     0.0769    1.7       1.0     40.0   10.0   30.0     13.0        2.2918            1.0856 0.4189             3.1986                 0.5023             0.7959                 0.7998            3.2681                0.0579
+600.0     55.0    0.25   5.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.5223            1.3836 0.4320             3.1986                 0.5023             0.7959                 0.7998            3.2668                0.0591
+675.0      0.0    0.50   5.0     29.0     0.0769    1.7       1.0     40.0   20.0   20.0     13.0        2.6542            1.5023 0.4240             3.1986                 0.5023             0.7959                 0.7998            3.2661                0.0593
+700.0     45.0    0.25  15.0     29.0     0.0769    1.7       1.0     40.0   30.0   10.0     13.0        2.4298            1.1546 0.3820             3.1986                 0.5023             0.7959                 0.7998            3.2573                0.0352
 
 figures (12^5 grid): BNN_mean.png, BNN_variance.png, acquisition_EI_BNN.png
 cross-check GP: at the suggestion 2.9211 +/- 0.5025  (figures GP_mean.png, GP_variance.png)
 cross-check RF: at the suggestion 2.8189 +/- 0.1027  (figures RF_mean.png, RF_variance.png)
+secondary metric SiOxNy_thick: 16 runs; figures SiOxNy_thick_GP_mean.png, SiOxNy_thick_GP_variance.png
+secondary metric SiOxNy_rough: 16 runs; figures SiOxNy_rough_GP_mean.png, SiOxNy_rough_GP_variance.png
+secondary metric AlN_density: 32 runs; figures AlN_density_GP_mean.png, AlN_density_GP_variance.png
 
 (LLM review not requested; prompt written to results/aln_sputter_sioxny/<timestamp>/llm_prompt.md)

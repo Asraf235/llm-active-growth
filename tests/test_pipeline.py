@@ -89,6 +89,9 @@ def test_run_step_figures(ds, tmp_path):
     assert ("BNN_mean.png" in names) == bnn_available()
     assert (tmp_path / "suggestion.csv").exists() and (tmp_path / "llm_prompt.md").exists()
     assert set(res["cross_check"]) >= {"RF"}
+    for m in res["packet"]["secondary_metric_figures"]:                 # one GP map pair per secondary metric
+        assert {f"{m}_GP_mean.png", f"{m}_GP_variance.png"} <= names
+    assert "Secondary-metric maps" in (tmp_path / "llm_prompt.md").read_text(encoding="utf-8")
 
 
 @pytest.mark.skipif(not LOG.exists(), reason="real sputter log not present")
