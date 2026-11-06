@@ -7,8 +7,8 @@ tools, each with its own parameter spec. The shipped example is an AlN seed-laye
 of SiO2 before AlN sputtering. A coding agent can run the loop from plain requests; `AGENTS.md` tells it how
 (`CLAUDE.md` imports it for Claude Code).
 
-The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) (BoTorch GP, qLogEI); the package name
-inside Python is `aln_bo`.
+The GP stack follows [alchemy](https://github.com/sumner-harris/alchemy) by Sumner Harris (BoTorch GP, qLogEI); the package name
+inside Python is `aln_bo`.    
 
 ## Install
 
